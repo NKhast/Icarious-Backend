@@ -1,24 +1,24 @@
 const users = []
 
-const addUser = ({ id, name, group}) => {
+const addUser = ({ id, name, room}) => {
 
-    name = name.trim().toUpperCase()
-    group = group.trim().toUpperCase()
+    name = name.trim().toLowerCase()
+    room = room.trim().toLowerCase()
 
-    const availableUser = users.find((user) => user.group === group && user.name === name)
-    if(availableUser){
-        return { error : 'Username is already taken.'}
+    const existingUser = users.find((user) => user.room === room && user.name === name)
+    if(existingUser){
+        return { error : 'Username is taken'}
     }
-    if(!name || !group){
-        return { error : 'Username and group name is required.'}
+    if(!name || !room){
+        return { error : 'Username and room are required'}
     }
 
-    const user = { id, name, group}
+    const user = { id, name, room}
     users.push(user)
     return { user }
 }
 
-const deleteUser = (id) => {
+const removeUser = (id) => {
     const index = users.findIndex((user) => user.id === id)
     if(index !== -1){
         return users.splice(index, 1)[0]
@@ -27,6 +27,6 @@ const deleteUser = (id) => {
 
 const getUser = (id) => users.find((user) => user.id === id)
 
-const getGroupUser = (group) => users.filter((user) => user.group === group)
+const getUserInRoom = (room) => users.filter((user) => user.room === room)
 
-module.exports = { addUser, deleteUser, getUser, getGroupUser }
+module.exports = { addUser, removeUser, getUser, getUserInRoom }
